@@ -1,4 +1,4 @@
-package controller;
+package tde01.controller;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import model.Empresa;
+import tde01.model.Empresa;
 
 /**
  * Luis Felipe Dos Santos

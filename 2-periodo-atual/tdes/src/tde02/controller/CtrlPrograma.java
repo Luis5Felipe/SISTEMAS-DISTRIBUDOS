@@ -1,6 +1,6 @@
 // Luis Felipe Dos Santos
 
-package controller;
+package tde02.controller;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;

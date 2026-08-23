@@ -1,4 +1,4 @@
-package model;
+package tde01.model;
 
 /**
  * Luis Felipe Dos Santos
