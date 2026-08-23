@@ -1,0 +1,13 @@
+# PDFs de aula (material do professor, não deve ir para o repositório remoto)
+*.pdf
+
+# IntelliJ (config local do projeto, gerada automaticamente)
+.idea/
+
+# Build outputs
+out/
+bin/
+target/
+
+# Mac OS
+.DS_Store
