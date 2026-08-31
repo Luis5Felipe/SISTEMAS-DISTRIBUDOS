@@ -69,3 +69,53 @@ Requisitos técnicos. O programa deverá obrigatoriamente:
 5º lugar: Tempestade
 
 Faça a entrega dos arquivos .java (Não aceitarei .zip, .pdf, ou outros formatos) para resolução do TDE e coloque na primeira linha um comentário com seu nome.
+
+## TDE 4
+
+Neste TDE, você deverá criar uma aplicação cliente/servidor em Java utilizando diretamente o protocolo TCP/IP; logo utilizando as classes ServerSocket e Socket. Nessa aplicação, o cliente irá enviar um número indefinido de números inteiros e como resposta deverá receber o valor da soma, da média e o desvio padrão desses números.
+
+A primeira coisa que você deverá pensar é como você irá estruturar esse protocolo. Vimos nos exemplos apresentados em sala de aula que podemos implementar um protocolo baseado no envio de Strings pelo cliente e servidor. Uma possibilidade de protocolo é enviarmos um número indefinido de Strings para o servidor, onde cada uma contém um número inteiro e, para marcar o final, enviamos uma String vazia. A resposta do Servidor pode ser uma String indicando o resultado das operações de soma, média e desvio padrão desses números.
+
+Uma outra possibilidade é enviarmos todos os números em uma única linha, separados por espaço ou outro caracter (ex. vírgula). A resposta poderia ser a mesma da ideia anterior ou poderíamos mandar três Strings, onde a primeira representa a soma, a segunda a média e a última o desvio padrão.
+
+Pense em como você vai implementar o protocolo de comunicação entre cliente e servidor e crie o código dessas duas partes do sistema. Faça a entrega dos arquivos .java (Não aceitarei .zip, .pdf, ou outros formatos) para resolução do TDE e coloque na primeira linha um comentário com seu nome em cada classe criada.
+
+### Protocolo definido na resolução (`tdes/src/tde04/`)
+
+Escolhi a ideia do "Exemplo 1" da aula (protocolo baseado em linhas de texto, terminado por String vazia):
+
+- **Cliente → Servidor** (UTF-8, um inteiro por linha):
+  ```
+  10
+  20
+  30
+          <- linha vazia marca o fim do envio
+  ```
+- **Servidor → Cliente** (3 linhas e fecha a conexão):
+  ```
+  SOMA=60
+  MEDIA=20.0000
+  DESVIO=8.1650
+  ```
+  Os `double` (média e desvio) vão como texto, com ponto decimal (`Locale.US`) e 4 casas. O desvio padrão é o **populacional** (divide por N).
+- **Em caso de erro** (linha que não é inteiro, ou nenhum número enviado) o servidor responde uma única linha e encerra:
+  ```
+  ERRO=Nenhum número foi enviado.
+  ```
+  O tratamento de erro faz parte do protocolo: o cliente sempre sabe se recebeu 3 linhas de resultado ou 1 de erro.
+
+Cada conexão é atendida por uma thread própria ("uma thread por conexão"), então vários clientes podem ser atendidos ao mesmo tempo.
+
+Arquivos entregues:
+- `tde04/model/CalculadoraEstatistica.java` — lógica pura (soma, média, desvio padrão), sem rede.
+- `tde04/servidor/ServidorEstatistica.java` — `main` do servidor: `ServerSocket`, laço de `accept()`, cria uma thread por conexão.
+- `tde04/servidor/TratadorConexao.java` — `Runnable` que atende um cliente e aplica o protocolo.
+- `tde04/cliente/ClienteEstatistica.java` — `main` do cliente: `Socket`, lê inteiros do teclado e exibe a resposta.
+
+Como executar:
+```bash
+cd 2-periodo-atual/tdes/src
+javac -encoding UTF-8 -d out tde04/model/*.java tde04/servidor/*.java tde04/cliente/*.java
+java -cp out tde04.servidor.ServidorEstatistica   # terminal 1
+java -cp out tde04.cliente.ClienteEstatistica     # terminal 2
+```

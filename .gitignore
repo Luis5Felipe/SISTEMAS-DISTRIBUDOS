@@ -11,3 +11,11 @@ target/
 
 # Mac OS
 .DS_Store
+
+# Metadados do Windows/WSL (marca de "arquivo baixado da internet")
+*:Zone.Identifier
+
+# Áudios das aulas (muito grandes para o Git / limite do GitHub)
+*.m4a
+*.mp3
+*.wav
